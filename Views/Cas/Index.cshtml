@@ -1,0 +1,37 @@
+﻿@model DropdownBind.Models.CascadingClass
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+
+@if (ViewBag.Statelist != null)
+{
+    @Html.DropDownListFor(x => x.StateID, ViewBag.Statelist as SelectList, "--Select--", new { @class = "form-control" })
+}
+
+@Html.DropDownListFor(x => x.CityID,new SelectList("") ,"--Select--", new { @class = "form-control" })
+
+
+<script src="~/Scripts/jquery-3.7.0.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#StateID").change(function () {
+            var Sid = $(this).val();
+
+            $.ajax({
+                type: "post",
+                url: "/Cas/GetCityList?StateID=" + Sid,
+                contentType: "html",
+                success: function (response) {
+                    $("#CityID").empty();
+                    $("#CityID").append(response);
+
+                }
+            })
+        });
+    });
+</script>
